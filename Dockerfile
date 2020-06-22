@@ -1,17 +1,16 @@
-FROM ubuntu:18.04
+FROM python:3
 
-
-RUN apt-get update -y && \
-    apt-get install -y python-pip python-dev
+RUN pip install --upgrade pip
+RUN pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
 
 # We copy just the requirements.txt first to leverage Docker cache
 COPY ./requirements.txt /app/requirements.txt
 
+COPY . /app
+
 WORKDIR /app
 
 RUN pip install -r requirements.txt
-
-COPY . /app
 
 ENTRYPOINT [ "python" ]
 
