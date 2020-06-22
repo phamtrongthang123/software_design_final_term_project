@@ -57,4 +57,5 @@ def results():
         model_result = {'size': [img.width, img.height], "predicted": classes[predicted]}        
         return jsonify(model_result)
 
-app.run("localhost", "3000", debug=True)
+# app.run("localhost", "3000", debug=True)
+app.run("0.0.0.0", "3000", debug=True)
