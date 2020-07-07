@@ -5,6 +5,9 @@ import torch
 import torchvision
 import torchvision.transforms as transforms
 import numpy as np
+from PIL import Image
+from io import BytesIO
+import base64
 from models import * 
 
 def get_model(model_type):
@@ -24,13 +27,28 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello bạn hiền!'
 
+
+import json
 @app.route('/cifar_classifier', methods=['POST'])
 def results():
     
     if request.method == 'POST':
-        
-        img_file = request.files['image']
-        img = Image.open(img_file.stream)
+        # convert bytes to dict if not python (send file instead data)
+        cur_lang = 'python'
+        try: 
+            dict_str = request.data.decode("UTF-8")
+            request.data = json.loads(dict_str)
+            cur_lang = request.data['lang']
+        except:
+            pass            
+
+        # each type of lang has difference way to read img, cpp case is decode base64, python send file in request instead data as cpp
+        # but current i dont know how to wrap lang into data field.
+        if cur_lang == 'python':
+            img_file = request.files['image']
+            img = Image.open(img_file.stream)
+        elif cur_lang == 'cpp':
+            img = Image.open(BytesIO(base64.b64decode(request.data['img_encoded'])))
         # if cifar 10
         img = img.convert("RGB")
         # try:
