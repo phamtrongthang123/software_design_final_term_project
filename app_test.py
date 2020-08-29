@@ -9,7 +9,6 @@ from PIL import Image
 from io import BytesIO
 import base64
 from models import * 
-from FlaskModel import FlaskModel
 
 def get_model(model_type):
     if model_type == "cifar10":
@@ -23,7 +22,6 @@ from PIL import Image
 import PIL
 
 app = Flask(__name__)
-flaskModel = FlaskModel()  
 
 @app.route('/')
 def hello_world():
@@ -31,7 +29,7 @@ def hello_world():
 
 
 import json
-@app.route('/', methods=['POST'])
+@app.route('/cifar_classifier', methods=['POST'])
 def results():
     
     if request.method == 'POST':
@@ -51,13 +49,30 @@ def results():
             img = Image.open(img_file.stream)
         elif cur_lang == 'cpp':
             img = Image.open(BytesIO(base64.b64decode(request.data['img_encoded'])))
-        else: 
-            img = Image.open(BytesIO(base64.b64decode(request.data['img_encoded'])))
+        # if cifar 10
+        img = img.convert("RGB")
+        # try:
+        #     img.save('./imgs/requested_img.jpg')
+        # except: 
+        #     try:
+        #         img.save('./imgs/requested_img.png')
+        #     except: 
+        #         return jsonify({"msg": "It's not an img file :D"})
         
-        img = img.convert("RGB")        
+        # input preprocessing
+        transform = transforms.Compose(
+                        [transforms.Resize((32,32)),
+                        transforms.ToTensor(),
+                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+        transform_img = transform(img)
+        # model processing
+        model = get_model("cifar10")                 
+        outputs = model(transform_img[None])
+        _,predicted = torch.max(outputs, 1)
+        classes = ('plane', 'car', 'bird', 'cat',
+           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
         
-                     
-        model_result = flaskModel.predict(img)
+        model_result = {'size': [img.width, img.height], "predicted": classes[predicted]}        
         return jsonify(model_result)
 
 # app.run("localhost", "3000", debug=True)

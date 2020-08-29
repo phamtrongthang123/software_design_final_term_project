@@ -23,3 +23,16 @@ class Net(nn.Module):
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
+
+    def predict(self,img):
+        transform = transforms.Compose(
+                        [transforms.Resize((32,32)),
+                        transforms.ToTensor(),
+                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+        transform_img = transform(img)
+        outputs = self.forward(transform_img[None])
+        score,predicted = torch.max(F.softmax(outputs, dim=1), 1)
+        classes = ('plane', 'car', 'bird', 'cat',
+           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
+        model_result = {'size': [img.width, img.height], "predicted": classes[predicted], "score": score.item()}        
+        return model_result
