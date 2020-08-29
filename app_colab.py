@@ -21,6 +21,7 @@ from PIL import Image
 import PIL
 
 app = Flask(__name__)
+run_with_ngrok(app)
 flaskModel = FlaskModel()  
 
 # Ignore error 15 omp
