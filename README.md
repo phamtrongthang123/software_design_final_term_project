@@ -1,6 +1,6 @@
 flask_server
 
-## Dependencies 
+## Dependencies
 
 ```
 pip install -r requirements.txt
@@ -13,11 +13,29 @@ cd flask_server
 python app.py
 ```
 
+## Return value
 
+POST form has to be:
 
-## Example call API 
+```
+mydata = {'img_encoded': base64_string, 'lang': 'custom', 'type': 'classify'}
+```
 
-### VNLang 
+type is classify / detection
+
+Return value:
+
+```
+#classify
+{'type':'classify', 'size': [img.width, img.height], "predicted": classes[predicted], "score": score.item()}
+
+#detection
+{'type': 'detection', 'size': [img.width, img.height], "predicted": base64_string}
+```
+
+## Example call API
+
+### VNLang (WIP)
 
 ```vnlang
 // http.vnl
@@ -30,4 +48,3 @@ http.req_post("http://127.0.0.1:3000/cifar_classifier","./imgs/palm.jpg")
 cd example
 go run ../src/vnlang/main.go http.vnl
 ```
-

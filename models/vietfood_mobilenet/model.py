@@ -33,5 +33,5 @@ class Net():
         outputs = self.forward(transform_img[None])
         score,predicted = torch.max(F.softmax(outputs, dim=1), 1)
         classes = ("BanhXeo", "banhmi", "banhtrangtron", "goicuon", "pho")
-        model_result = {'size': [img.width, img.height], "predicted": classes[predicted], "score": score.item()}        
+        model_result = {'type':'classify', 'size': [img.width, img.height], "predicted": classes[predicted], "score": score.item()}        
         return model_result

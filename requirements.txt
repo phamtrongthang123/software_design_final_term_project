@@ -3,3 +3,6 @@ numpy>=1.13
 torch
 torchvision
 Pillow
+opencv-python
+cloudinary
+Django~=2.2.4
