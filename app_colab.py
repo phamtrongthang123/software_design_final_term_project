@@ -38,11 +38,13 @@ def results():
     
     if request.method == 'POST':
         # convert bytes to dict if not python (send file instead data)
+        # rdata = request.json
+        # print(rdata)
         cur_lang = 'python'
         try: 
-            # dict_str = request.data.decode("UTF-8")            
+            # dict_str = request.decode("UTF-8")            
             # request.data = json.loads(dict_str)
-            cur_lang = request.form['lang']
+            cur_lang = request.json['lang']
         except:
             pass    
         print("Client language:", cur_lang)        
@@ -52,12 +54,12 @@ def results():
             img_file = request.files['image']
             img = Image.open(img_file.stream)
         elif cur_lang == 'cpp':
-            img = Image.open(BytesIO(base64.b64decode(request.form['img_encoded'])))
+            img = Image.open(BytesIO(base64.b64decode(request.json['img_encoded'])))
         else: 
-            img = Image.open(BytesIO(base64.b64decode(request.form['img_encoded'])))
+            img = Image.open(BytesIO(base64.b64decode(request.json['img_encoded'])))
         
         img = img.convert("RGB") 
-        state = request.form['type']  
+        state = request.json['type']  
         print("Client state:", state)
         if (flaskModel.getState() != state):     
             flaskModel.switch_state(state)
