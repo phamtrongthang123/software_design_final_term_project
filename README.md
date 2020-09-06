@@ -8,8 +8,24 @@ pip install -r requirements.txt
 
 ## Start server
 
+### Local
 ```
 cd flask_server
+python app.py
+```
+### Google colab
+```
+cd flask_server
+python app_colab.py
+```
+### With docker
+Require aws: at least 2 cpu cores, 2gb RAM.
+```
+sudo docker build -t flask_server .
+sudo docker run -i -t  -p 3000:3000 flask_server:latest /bin/bash
+```
+if it didnt start, go into the bash of docker and run manually 
+```
 python app.py
 ```
 
