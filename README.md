@@ -6,6 +6,11 @@ flask_server
 pip install -r requirements.txt
 ```
 
+## Weights
+Download weights in the link below and move yolo weight into vietfood_yolo/weights, mobilenet weight into vietfood_mobilenet
+
+https://drive.google.com/drive/folders/1Sii41Mxpz8lXfq9gxWbEY-ceslchJdaB?usp=sharing
+
 ## Start server
 
 ### Local
