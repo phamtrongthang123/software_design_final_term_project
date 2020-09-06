@@ -2,7 +2,7 @@ FROM python:3
 
 RUN pip install --upgrade pip
 RUN pip install torch==1.5.1+cpu torchvision==0.6.1+cpu -f https://download.pytorch.org/whl/torch_stable.html
-RUN apt-get install 'ffmpeg'\
+RUN apt-get install 'libgl1-mesa-glx'\
     'libsm6'\ 
     'libxext6'  -y
     
